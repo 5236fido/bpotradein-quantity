@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Détails par Représentant</title>
+  <style>
+    
+    @font-face {
+      font-family: 'Ted Next';
+      src: url('https://raw.githubusercontent.com/rogersrepaccess/devis/main/fonts/TedNext-Regular.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+    
+    body {
+      font-family: Ted Next;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      max-width: 500px;
+    }
+    .details-section {
+      width: 80%;
+      margin: 20px auto;
+      font-family: Ted Next;
+      font-weight: normal;
+      font-size: 18px;
+    }
+    .details-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      padding-left: 20px;
+    }
+    .circle {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #DA291C;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0px 0px 10px #f2b3ae;
+    }
+  </style>
+</head>
+<body>
+  <h1>Nombre de trade-ins</h1>
+  <div class="details-section" id="detailsSection">
+    <!-- Les détails seront insérés ici -->
+  </div>
+
+  <script>
+    const url = "https://script.google.com/macros/s/AKfycby-etAq97MuT1zAroGo8diu7q1AaZjqVBeGGRUDyWIR7C8CeU9-7kTav8c_bkTh5DXk/exec";
+
+    async function fetchData() {
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        const detailsSection = document.getElementById('detailsSection');
+
+        data.forEach(row => {
+          // Ignorer les lignes où REP est vide ou "Non attribué"
+          if (!row.REP || row.REP === "Non attribué") return;
+
+          // Ajouter les détails
+          const detailsRow = document.createElement('div');
+          detailsRow.className = 'details-row';
+          detailsRow.innerHTML = `
+            <span>${row.REP}</span>
+            <span class="circle">${row.NB}</span>
+          `;
+          detailsSection.appendChild(detailsRow);
+        });
+      } catch (error) {
+        console.error('Erreur lors du chargement des données :', error);
+      }
+    }
+
+    fetchData();
+  </script>
+</body>
+</html>
